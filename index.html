@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bônus 6 — 21 Dias Para Voltar a Viver | Ana Luiza Medeiros</title>
+<style>
+  :root {
+    --bg:#FBF8F3; --terracota:#C4785A; --terracota-light:#F0DDD5;
+    --salvia:#7A9B76; --salvia-light:#E8F0E6; --grafite:#2C2C2A;
+    --cream:#F5EFE6; --linha:#D9BFB5; --white:#ffffff;
+    --dourado:#c9a84c; --dourado-light:#f5ecd0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--grafite);font-family:Georgia,serif;font-size:16px;line-height:1.8}
+
+  /* HEADER */
+  .header{background:var(--grafite);color:var(--white);padding:40px 24px 32px;text-align:center;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(201,168,76,.12) 0%,transparent 70%)}
+  .header .badge{display:inline-block;background:var(--terracota);color:var(--white);font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px;font-family:Arial;position:relative}
+  .header h1{font-size:clamp(24px,5vw,38px);font-weight:normal;font-style:italic;color:var(--dourado-light);line-height:1.3;margin-bottom:8px;position:relative}
+  .header p{color:#aaa;font-size:13px;font-family:Arial;position:relative}
+  .header-cruz{font-size:28px;opacity:.4;margin-bottom:8px}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:100;background:var(--grafite);border-top:1px solid #3a3a38;display:flex;overflow-x:auto;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{flex-shrink:0;color:#aaa;text-decoration:none;padding:12px 14px;font-size:12px;white-space:nowrap;transition:color .2s,border-bottom .2s;border-bottom:2px solid transparent;font-family:Arial}
+  .nav a:hover,.nav a.active{color:var(--dourado-light);border-bottom:2px solid var(--terracota)}
+
+  .progress-bar-wrap{background:#e0dbd4;height:5px;position:sticky;top:43px;z-index:99}
+  .progress-bar-fill{height:5px;background:linear-gradient(90deg,var(--terracota),var(--dourado));width:0%;transition:width .5s ease}
+
+  .section{padding:48px 20px;max-width:720px;margin:0 auto}
+  .section+.section{border-top:1px solid var(--linha)}
+
+  /* CALENDÁRIO DE PROGRESSO */
+  .cal-wrap{background:var(--white);border-radius:14px;padding:22px 20px;box-shadow:0 1px 6px rgba(0,0,0,.07);margin-bottom:32px}
+  .cal-titulo{font-size:13px;font-weight:bold;color:var(--grafite);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;font-family:Arial}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-dia{aspect-ratio:1;border-radius:50%;border:2px solid var(--linha);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;color:#aaa;cursor:pointer;transition:all .2s;font-family:Arial;user-select:none}
+  .cal-dia:hover{border-color:var(--terracota);color:var(--terracota)}
+  .cal-dia.lido{background:var(--terracota);border-color:var(--terracota);color:var(--white)}
+  .cal-legenda{font-size:12px;color:#aaa;margin-top:10px;font-family:Arial}
+
+  /* INTRO */
+  .intro-card{background:var(--grafite);border-radius:16px;padding:36px 28px;margin-bottom:28px;border-left:4px solid var(--dourado)}
+  .intro-card h2{font-size:22px;color:var(--dourado-light);font-style:italic;margin-bottom:20px}
+  .intro-card p{color:#ccc;margin-bottom:14px;font-size:15px;line-height:1.9}
+  .intro-card p.destaque{color:var(--dourado-light);font-style:italic;font-size:16px;margin-bottom:0}
+
+  .how-to{display:grid;gap:12px;margin-top:20px}
+  .how-step{display:flex;gap:16px;align-items:flex-start;background:var(--white);border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .how-num{background:var(--terracota);color:var(--white);font-weight:bold;font-size:13px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Arial}
+  .how-step p{font-size:14px;color:#555;font-family:Arial}
+
+  /* SEMANA HEADER */
+  .semana-header{background:linear-gradient(135deg,var(--grafite),#3d2a22);border-radius:14px;padding:20px 22px;margin-bottom:24px;display:flex;align-items:center;gap:16px}
+  .semana-icon{font-size:28px}
+  .semana-info h3{font-size:18px;color:var(--dourado-light);font-style:italic;margin-bottom:2px}
+  .semana-info span{font-size:13px;color:#aaa;font-family:Arial}
+
+  /* CARD DE DIA */
+  .dia-card{background:var(--white);border-radius:14px;padding:26px 22px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:20px;border-top:4px solid var(--terracota)}
+  .dia-card.semana2{border-top-color:var(--salvia)}
+  .dia-card.semana3{border-top-color:var(--dourado)}
+
+  .dia-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+  .dia-num{background:var(--terracota);color:var(--white);font-size:11px;font-weight:bold;padding:6px 12px;border-radius:20px;white-space:nowrap;font-family:Arial;flex-shrink:0}
+  .dia-card.semana2 .dia-num{background:var(--salvia)}
+  .dia-card.semana3 .dia-num{background:var(--dourado)}
+  .dia-tema{font-size:18px;color:var(--grafite);font-style:italic;line-height:1.3}
+
+  .versículo-wrap{background:var(--dourado-light);border-radius:10px;padding:18px 20px;margin-bottom:16px;text-align:center}
+  .versículo-texto{font-size:16px;color:var(--grafite);font-style:italic;line-height:1.7;margin-bottom:8px}
+  .versículo-ref{font-size:13px;color:var(--terracota);font-family:Arial;font-weight:bold;font-style:normal}
+
+  .reflexao{font-size:14px;color:#555;line-height:1.8;margin-bottom:16px;font-family:Arial}
+
+  .afirmacao{background:var(--grafite);border-radius:8px;padding:12px 16px;text-align:center;margin-bottom:18px}
+  .afirmacao p{font-style:italic;color:var(--terracota-light);font-size:14px}
+
+  .oracao-label{font-size:13px;font-weight:bold;color:var(--grafite);margin-bottom:8px;display:block;font-family:Arial}
+  .oracao-field{width:100%;border:1px solid var(--linha);border-radius:8px;padding:10px 12px;font-size:14px;font-family:Georgia,serif;color:var(--grafite);resize:vertical;outline:none;min-height:80px;background:var(--bg);transition:border-color .2s}
+  .oracao-field:focus{border-color:var(--terracota)}
+
+  .check-lido{display:flex;align-items:center;gap:10px;margin-top:14px;cursor:pointer}
+  .check-lido input{width:18px;height:18px;accent-color:var(--salvia);cursor:pointer}
+  .check-lido span{font-size:13px;color:#888;font-family:Arial}
+  .check-lido.marcado span{color:var(--salvia);font-weight:bold}
+
+  /* ENCERRAMENTO */
+  .enc-campos{background:var(--cream);border-radius:12px;padding:24px 20px;margin-top:24px}
+  .enc-campos h3{font-size:18px;color:var(--grafite);font-style:italic;margin-bottom:6px}
+  .enc-campos p{font-size:14px;color:#666;margin-bottom:20px;font-family:Arial}
+  .enc-campo{margin-bottom:16px}
+  .enc-campo label{font-size:13px;font-weight:bold;color:var(--grafite);display:block;margin-bottom:6px;font-family:Arial}
+  .enc-campo textarea{width:100%;border:1px solid var(--linha);border-radius:8px;padding:10px 12px;font-size:14px;font-family:Georgia,serif;color:var(--grafite);resize:vertical;min-height:72px;background:var(--white);outline:none;transition:border-color .2s}
+  .enc-campo textarea:focus{border-color:var(--terracota)}
+  .enc-campo input{width:100%;border:none;border-bottom:2px solid var(--linha);background:transparent;font-size:15px;font-family:Georgia,serif;color:var(--grafite);padding:8px 4px;outline:none}
+  .enc-campo input:focus{border-color:var(--terracota)}
+
+  /* COMPROMISSO */
+  .compromisso-card{background:var(--grafite);border-radius:16px;padding:32px 24px;text-align:center;margin-top:32px}
+  .compromisso-card h3{font-size:20px;color:var(--dourado-light);font-style:italic;margin-bottom:12px}
+  .compromisso-card p{color:#aaa;font-size:14px;margin-bottom:24px;font-family:Arial}
+  .compromisso-btn{background:var(--terracota);color:var(--white);border:none;border-radius:28px;padding:14px 40px;font-size:16px;font-weight:bold;cursor:pointer;transition:background .2s;font-family:Arial}
+  .compromisso-btn:hover{background:#b06a4e}
+  #compromisso-feito{display:none;color:#7fcf7a;font-size:15px;margin-top:16px;font-style:italic}
+  #btn-rever{display:none;background:transparent;color:var(--dourado-light);border:1px solid var(--terracota);border-radius:20px;padding:8px 20px;font-size:13px;cursor:pointer;margin-top:12px;font-family:Arial}
+
+  .encerramento-final{background:var(--terracota-light);border-radius:16px;padding:36px 24px;text-align:center;margin-top:24px}
+  .encerramento-final h3{font-size:22px;color:var(--grafite);font-style:italic;margin-bottom:14px}
+  .encerramento-final p{color:#5a3a2a;margin-bottom:14px;font-size:15px;font-family:Arial}
+  .workbook-btn{display:inline-block;background:var(--grafite);color:var(--white);text-decoration:none;padding:14px 36px;border-radius:28px;font-weight:bold;font-size:15px;margin-top:10px;font-family:Arial;transition:background .2s}
+  .workbook-btn:hover{background:#444}
+  .enc-disclaimer{font-size:12px;color:#888;font-style:italic;margin-top:14px;font-family:Arial}
+
+  .save-fab{position:fixed;bottom:24px;right:20px;background:var(--grafite);color:var(--white);border:none;border-radius:28px;padding:12px 20px;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:200;transition:background .2s;font-family:Arial}
+  .save-fab:hover{background:var(--terracota)}
+  .print-fab{position:fixed;bottom:24px;right:130px;background:var(--salvia);color:var(--white);border:none;border-radius:28px;padding:12px 20px;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:200;transition:background .2s;font-family:Arial}
+  .print-fab:hover{background:#5e7d5b}
+
+  #cel-overlay{visibility:hidden;opacity:0;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .35s,visibility .35s}
+  #cel-overlay.show{visibility:visible;opacity:1}
+  .cel-box{background:var(--white);border-radius:20px;padding:40px 32px;max-width:420px;width:100%;text-align:center}
+  .cel-emoji{font-size:56px;margin-bottom:16px;line-height:1}
+  .cel-box h2{font-size:19px;color:var(--grafite);font-style:italic;margin-bottom:10px;line-height:1.5}
+  .cel-box p{color:#666;font-size:14px;margin-bottom:24px;font-family:Arial}
+  .cel-btn-ok{background:var(--terracota);color:var(--white);border:none;border-radius:24px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:Arial;width:100%;margin-bottom:10px}
+  .cel-btn-replay{background:transparent;color:var(--terracota);border:2px solid var(--terracota);border-radius:24px;padding:10px 0;font-size:14px;cursor:pointer;font-family:Arial;width:100%}
+  .confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999}
+
+  @media print{
+    .nav,.progress-bar-wrap,.save-fab,.print-fab,#cel-overlay,.confetti-canvas,.check-lido{display:none!important}
+    .header{background:var(--grafite)!important;-webkit-print-color-adjust:exact}
+    .section{padding:24px 16px}
+    body{font-size:13px}
+    .dia-card{break-inside:avoid;page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-cruz">✝</div>
+  <div class="badge">★ Bônus 6 — Exclusivo do Workbook ★</div>
+  <h1>21 Dias Para Voltar a Viver</h1>
+  <p>Uma palavra de Deus para cada dia, para ancorar sua alma quando a ansiedade chegar<br>Ana Luiza Medeiros – Psicóloga Clínica · analuizapsicologa.com.br</p>
+</div>
+
+<nav class="nav">
+  <a href="#intro" class="active">Início</a>
+  <a href="#semana1">Semana 1</a>
+  <a href="#semana2">Semana 2</a>
+  <a href="#semana3">Semana 3</a>
+  <a href="#encerramento">Encerramento</a>
+</nav>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+
+<!-- INTRO -->
+<section class="section" id="intro">
+
+  <!-- CALENDÁRIO DE PROGRESSO -->
+  <div class="cal-wrap">
+    <div class="cal-titulo">📅 Seus 21 dias</div>
+    <div class="cal-grid" id="calendario"></div>
+    <div class="cal-legenda">Clique no dia para marcar como lido · <span id="cal-contagem">0 de 21 dias concluídos</span></div>
+  </div>
+
+  <div class="intro-card">
+    <h2>Antes de Começar</h2>
+    <p>Este material não é um devocional no sentido tradicional. Não há uma doutrina a seguir nem uma forma certa de ler. Há apenas palavras que foram escritas para pessoas que estavam sobrecarregadas, com medo ou sem chão. Pessoas muito parecidas com você.</p>
+    <p>Cada dia tem um versículo, uma reflexão breve e uma afirmação para ancorar. Você pode ler de manhã, antes de dormir, ou no meio de um dia pesado. Não existe horário certo. Existe o momento em que você precisa.</p>
+    <p>A linha de oração no final de cada card não é obrigatória. Mas se você escrever, mesmo que uma palavra, vai perceber algo: ao final de 21 dias, você terá um registro do que estava sentindo e de como foi sendo sustentada. Uma poderosa transformação está acontecendo.</p>
+    <p class="destaque">Vinte e um dias. Vinte e um momentos de pausa. Uma vida que vai mudando devagar.</p>
+  </div>
+
+  <p style="font-weight:bold;color:var(--grafite);margin:24px 0 12px;font-family:Arial">Como Usar</p>
+  <div class="how-to">
+    <div class="how-step"><div class="how-num">1</div><p><strong>Leia devagar</strong> — Não é para ser consumido rápido. Uma leitura lenta vale mais do que dez leituras apressadas.</p></div>
+    <div class="how-step"><div class="how-num">2</div><p><strong>Fique no versículo</strong> — Se uma palavra tocar você, pare ali. Releia. Deixe entrar. Não precisa terminar o card para colher o fruto.</p></div>
+    <div class="how-step"><div class="how-num">3</div><p><strong>Escreva o que vier</strong> — A linha de oração é sua. Uma palavra, uma frase, um nome. O que sair é o que precisa sair.</p></div>
+    <div class="how-step"><div class="how-num">4</div><p><strong>Volte quando precisar</strong> — Este material não é de uso único. Você pode retornar ao Dia 7 em uma quarta-feira qualquer, se for o que você precisa.</p></div>
+  </div>
+</section>
+
+<!-- SEMANA 1 -->
+<section class="section" id="semana1">
+  <div class="semana-header">
+    <div class="semana-icon">🌱</div>
+    <div class="semana-info">
+      <h3>Semana 1 — Para Quando a Ansiedade Chegar</h3>
+      <span>Dias 1 a 7 · Palavras para o momento em que o peso chega</span>
+    </div>
+  </div>
+
+  <!-- DIA 1 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 1</div><div class="dia-tema">Paz que transcende</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"A paz de Deus, que excede todo o entendimento, guardará os vossos corações e os vossos pensamentos."</p><p class="versículo-ref">Filipenses 4.7</p></div>
+    <p class="reflexao">Há uma paz que não vem de circunstâncias resolvidas. Ela vem antes disso, no meio do caos, como uma mão que segura o que está prestes a cair.</p>
+    <div class="afirmacao"><p>"Hoje eu recebo a paz que não precisa fazer sentido."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d1" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d1"><input type="checkbox" onchange="marcarDia(1,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 2 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 2</div><div class="dia-tema">Ele cuida</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós."</p><p class="versículo-ref">1 Pedro 5.7</p></div>
+    <p class="reflexao">Você não precisa carregar sozinha o peso do que ainda não tem solução. Existe um lugar para depositar isso. E esse lugar não cede.</p>
+    <div class="afirmacao"><p>"Hoje eu solto o que não consigo resolver."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d2" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d2"><input type="checkbox" onchange="marcarDia(2,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 3 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 3</div><div class="dia-tema">Força renovada</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Os que esperam no Senhor renovarão as suas forças, subirão com asas como águias."</p><p class="versículo-ref">Isaías 40.31</p></div>
+    <p class="reflexao">Renovar não significa nunca cansar. Significa que o cansaço não tem a última palavra. Existe uma fonte que não seca.</p>
+    <div class="afirmacao"><p>"Minha força não depende de mim sozinha."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d3" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d3"><input type="checkbox" onchange="marcarDia(3,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 4 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 4</div><div class="dia-tema">Não tema</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Não temas, porque eu sou contigo; não te assombres, porque eu sou teu Deus."</p><p class="versículo-ref">Isaías 41.10</p></div>
+    <p class="reflexao">O medo pede que você olhe para o que pode dar errado. Esta palavra pede que você olhe para quem está com você. Não é o mesmo olhar.</p>
+    <div class="afirmacao"><p>"Hoje eu escolho olhar para quem está comigo."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d4" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d4"><input type="checkbox" onchange="marcarDia(4,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 5 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 5</div><div class="dia-tema">Ele ouve</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Clama a mim, e responder-te-ei, e anunciar-te-ei coisas grandes e firmes, que não sabes."</p><p class="versículo-ref">Jeremias 33.3</p></div>
+    <p class="reflexao">A oração não precisa ser bonita. Pode ser uma palavra, um suspiro, um "não aguento mais". Isso já é o suficiente para ser ouvida.</p>
+    <div class="afirmacao"><p>"Hoje eu falo mesmo sem ter todas as palavras."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d5" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d5"><input type="checkbox" onchange="marcarDia(5,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 6 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 6</div><div class="dia-tema">Descanso verdadeiro</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Vinde a mim, todos os que estais cansados e sobrecarregados, e eu vos aliviarei."</p><p class="versículo-ref">Mateus 11.28</p></div>
+    <p class="reflexao">Existe uma diferença entre descanso de corpo e descanso de alma. Este versículo fala do segundo. Aquele que nenhuma cama consegue dar.</p>
+    <div class="afirmacao"><p>"Hoje eu me permito descansar de verdade."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d6" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d6"><input type="checkbox" onchange="marcarDia(6,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 7 -->
+  <div class="dia-card">
+    <div class="dia-header"><div class="dia-num">DIA 7</div><div class="dia-tema">Paz comandada</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Não andeis ansiosos por coisa alguma; antes as vossas petições sejam conhecidas diante de Deus."</p><p class="versículo-ref">Filipenses 4.6</p></div>
+    <p class="reflexao">A ansiedade quer que você resolva tudo antes de ter paz. Esta palavra inverte essa lógica: a paz vem primeiro, e com ela você consegue lidar com o resto.</p>
+    <div class="afirmacao"><p>"Hoje eu oro antes de resolver."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d7" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d7"><input type="checkbox" onchange="marcarDia(7,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+</section>
+
+<!-- SEMANA 2 -->
+<section class="section" id="semana2">
+  <div class="semana-header">
+    <div class="semana-icon">🌿</div>
+    <div class="semana-info">
+      <h3>Semana 2 — Para Quando Você Se Sentir Insuficiente</h3>
+      <span>Dias 8 a 14 · Palavras sobre valor, identidade e graça</span>
+    </div>
+  </div>
+
+  <!-- DIA 8 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 8</div><div class="dia-tema">Obra concluída</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Aquele que em vós começou a boa obra a aperfeiçoará até ao dia de Cristo Jesus."</p><p class="versículo-ref">Filipenses 1.6</p></div>
+    <p class="reflexao">Você não está inacabada. Você está em processo. E existe uma diferença enorme entre as duas coisas.</p>
+    <div class="afirmacao"><p>"Hoje eu confio no processo, não na perfeição."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d8" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d8"><input type="checkbox" onchange="marcarDia(8,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 9 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 9</div><div class="dia-tema">Criada com amor</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Pois tu formaste os meus rins, tu me cobriste no ventre de minha mãe. Graças te dou, porque de modo assombroso e admirável me formaste."</p><p class="versículo-ref">Salmo 139.13-14</p></div>
+    <p class="reflexao">Antes de qualquer coisa que você tenha conquistado ou perdido, antes de qualquer aprovação ou rejeição, você já foi feita com intenção.</p>
+    <div class="afirmacao"><p>"Hoje eu me vejo como alguém que foi feita com cuidado."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d9" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d9"><input type="checkbox" onchange="marcarDia(9,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 10 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 10</div><div class="dia-tema">Ele completa</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Tudo posso naquele que me fortalece."</p><p class="versículo-ref">Filipenses 4.13</p></div>
+    <p class="reflexao">Isso não é uma promessa de invencibilidade. É uma promessa de companhia. Você não precisa conseguir tudo sozinha, porque não está sozinha.</p>
+    <div class="afirmacao"><p>"Hoje eu deixo o que falta ser suprido."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d10" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d10"><input type="checkbox" onchange="marcarDia(10,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 11 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 11</div><div class="dia-tema">Valiosa e amada</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Quanto valem dois pardais? Uma moeda de cobre. No entanto, nenhum deles cai por terra sem que seu Pai o permita. Vós valeis mais do que muitos pardais."</p><p class="versículo-ref">Mateus 10.29-31</p></div>
+    <p class="reflexao">O universo inteiro é sustentado com atenção. E você, dentro dele, não passou despercebida.</p>
+    <div class="afirmacao"><p>"Hoje eu acredito que sou vista e que tenho valor."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d11" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d11"><input type="checkbox" onchange="marcarDia(11,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 12 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 12</div><div class="dia-tema">Identidade firmada</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Vede que grande amor nos deu o Pai, para que sejamos chamados filhos de Deus."</p><p class="versículo-ref">1 João 3.1</p></div>
+    <p class="reflexao">Antes de ser definida pelo que faz, pelo que tem ou pelo que os outros dizem, existe uma identidade mais funda que essa. E ela não depende do seu desempenho.</p>
+    <div class="afirmacao"><p>"Hoje eu descanso em quem sou, não no que faço."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d12" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d12"><input type="checkbox" onchange="marcarDia(12,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 13 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 13</div><div class="dia-tema">Novos começos</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"As misericórdias do Senhor são novas cada manhã; grande é a tua fidelidade."</p><p class="versículo-ref">Lamentações 3.23</p></div>
+    <p class="reflexao">Ontem pesado não precisa ser o peso de hoje. Cada manhã é uma fronteira. Do lado de cá, o que foi. Do lado de lá, o que ainda pode ser.</p>
+    <div class="afirmacao"><p>"Hoje começa de onde estou, não de onde errei."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d13" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d13"><input type="checkbox" onchange="marcarDia(13,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 14 -->
+  <div class="dia-card semana2">
+    <div class="dia-header"><div class="dia-num">DIA 14</div><div class="dia-tema">Pensamentos que elevam</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Tudo o que é verdadeiro, tudo o que é honesto, tudo o que é justo... nisso pensai."</p><p class="versículo-ref">Filipenses 4.8</p></div>
+    <p class="reflexao">A mente vai para onde você a convida. Esta palavra não é ingenuidade: é treino. É escolher, de propósito, o que alimenta.</p>
+    <div class="afirmacao"><p>"Hoje eu cuido do que deixo entrar na minha mente."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d14" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d14"><input type="checkbox" onchange="marcarDia(14,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+</section>
+
+<!-- SEMANA 3 -->
+<section class="section" id="semana3">
+  <div class="semana-header">
+    <div class="semana-icon">✨</div>
+    <div class="semana-info">
+      <h3>Semana 3 — Para Reconstruir com Esperança</h3>
+      <span>Dias 15 a 21 · Palavras de renovação, fruto e amor</span>
+    </div>
+  </div>
+
+  <!-- DIA 15 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 15</div><div class="dia-tema">Ele não dorme</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"O Senhor é o teu guarda; o Senhor é a tua sombra à tua mão direita. O sol não te ferirá de dia, nem a lua de noite."</p><p class="versículo-ref">Salmo 121.5-6</p></div>
+    <p class="reflexao">Nos dias em que você acorda pesada e não sente nada, saiba que a presença não precisa ser sentida para ser real.</p>
+    <div class="afirmacao"><p>"Hoje eu confio mesmo sem sentir."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d15" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d15"><input type="checkbox" onchange="marcarDia(15,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 16 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 16</div><div class="dia-tema">Renovada a cada dia</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Portanto não desanimamos; mas, ainda que o nosso homem exterior se corrompa, o interior, contudo, se renova de dia em dia."</p><p class="versículo-ref">2 Coríntios 4.16</p></div>
+    <p class="reflexao">O cansaço que você sente é real. Mas existe algo dentro de você que não cansa no mesmo ritmo. Essa é a parte que sustenta.</p>
+    <div class="afirmacao"><p>"Hoje eu cuido da parte que renova."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d16" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d16"><input type="checkbox" onchange="marcarDia(16,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 17 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 17</div><div class="dia-tema">Luz no caminho</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"A tua palavra é lâmpada para os meus pés e luz para o meu caminho."</p><p class="versículo-ref">Salmo 119.105</p></div>
+    <p class="reflexao">A lâmpada ilumina um passo. Não o caminho todo. Às vezes, ver o próximo passo é o suficiente para continuar.</p>
+    <div class="afirmacao"><p>"Hoje eu dou um passo. Só um."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d17" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d17"><input type="checkbox" onchange="marcarDia(17,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 18 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 18</div><div class="dia-tema">Fruto que permanece</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Eu sou a videira, vós sois os ramos. Quem permanece em mim e eu nele, esse dá muito fruto."</p><p class="versículo-ref">João 15.5</p></div>
+    <p class="reflexao">O fruto não é produzido por esforço. É consequência de conexão. Quando você cuida do vínculo, o resto vem naturalmente.</p>
+    <div class="afirmacao"><p>"Hoje eu foco em estar conectada, não em produzir."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d18" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d18"><input type="checkbox" onchange="marcarDia(18,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 19 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 19</div><div class="dia-tema">Esperança viva</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Porque eu sei os planos que tenho a vosso respeito, planos de paz e não de mal, para vos dar um futuro e uma esperança."</p><p class="versículo-ref">Jeremias 29.11</p></div>
+    <p class="reflexao">Esta palavra foi escrita para pessoas no exílio. Pessoas que haviam perdido quase tudo. E mesmo assim, a promessa de futuro era real.</p>
+    <div class="afirmacao"><p>"Hoje eu recebo a esperança que vem de fora de mim."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d19" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d19"><input type="checkbox" onchange="marcarDia(19,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 20 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 20</div><div class="dia-tema">Nova criação</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"Se alguém está em Cristo, é nova criatura; as coisas velhas já passaram; eis que tudo se fez novo."</p><p class="versículo-ref">2 Coríntios 5.17</p></div>
+    <p class="reflexao">Isso não é uma promessa de que você vai esquecer o passado. É a promessa de que o passado não define o futuro. Você não é a mesma que entrou nessa jornada.</p>
+    <div class="afirmacao"><p>"Hoje eu me reconheço como alguém que está se tornando nova."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d20" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d20"><input type="checkbox" onchange="marcarDia(20,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+
+  <!-- DIA 21 -->
+  <div class="dia-card semana3">
+    <div class="dia-header"><div class="dia-num">DIA 21</div><div class="dia-tema">Amor que não falha</div></div>
+    <div class="versículo-wrap"><p class="versículo-texto">"E eu estou convicto de que nem a morte, nem a vida, nem anjos, nem principados, nem potestades... nos poderá separar do amor de Deus."</p><p class="versículo-ref">Romanos 8.38-39</p></div>
+    <p class="reflexao">Este é o último dia dos 21. E a palavra para este dia é a mais simples e a mais difícil de receber: você é amada. De forma que nenhuma circunstância consegue interromper.</p>
+    <div class="afirmacao"><p>"Hoje eu recebo o amor que não preciso merecer."</p></div>
+    <label class="oracao-label">Minha oração ou reflexão de hoje:</label>
+    <textarea class="oracao-field" id="d21" oninput="autoSave()" placeholder="Escreva o que vier ao coração..."></textarea>
+    <label class="check-lido" id="lbl-d21"><input type="checkbox" onchange="marcarDia(21,this.checked)"><span>✓ Li este dia</span></label>
+  </div>
+</section>
+
+<!-- ENCERRAMENTO -->
+<section class="section" id="encerramento">
+  <div class="enc-campos">
+    <h3>Vinte e um dias depois</h3>
+    <p>Você não é mais a mesma de quando começou. Vinte e um dias de pausa. Vinte e um momentos em que você escolheu parar e ouvir algo maior do que a voz da ansiedade. Isso não é pouco.</p>
+
+    <div class="enc-campo">
+      <label>O dia que mais me tocou foi o Dia ___. Por quê:</label>
+      <textarea id="enc-1" oninput="autoSave()" placeholder="Escreva livremente..."></textarea>
+    </div>
+    <div class="enc-campo">
+      <label>A palavra que ficou comigo nesses 21 dias:</label>
+      <input type="text" id="enc-2" oninput="autoSave()" placeholder="Uma palavra ou frase...">
+    </div>
+    <div class="enc-campo">
+      <label>O que mudou em mim ao longo desse período:</label>
+      <textarea id="enc-3" oninput="autoSave()" placeholder="Escreva livremente..."></textarea>
+    </div>
+  </div>
+
+  <div class="compromisso-card">
+    <h3>Parabéns Por Ter Chegado Aqui!</h3>
+    <p>Vinte e um dias de presença e registro. A paz que excede o entendimento já estava esperando por você.</p>
+    <button class="compromisso-btn" onclick="celebrar()">✨ Confirmo meu compromisso</button>
+    <div id="compromisso-feito">✓ Compromisso assumido com coragem e fé.</div>
+    <button id="btn-rever" onclick="abrirCel()">↺ Rever celebração</button>
+  </div>
+
+  <div class="encerramento-final">
+    <h3>A paz que excede o entendimento já estava esperando por você.</h3>
+    <p>Continue com o workbook. As próximas práticas já estão esperando.</p>
+    <a class="workbook-btn" href="https://analuizapsicologa.com.br" target="_blank">→ Acessar o Workbook Completo</a>
+    <p class="enc-disclaimer">Este material é um complemento terapêutico-espiritual e não substitui acompanhamento psicológico ou aconselhamento pastoral individualizado.</p>
+  </div>
+</section>
+
+<button class="save-fab" id="saveFab" onclick="manualSave()">💾 Salvar</button>
+<button class="print-fab" onclick="window.print()">🖨 Imprimir PDF</button>
+
+<canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+<div id="cel-overlay">
+  <div class="cel-box">
+    <div class="cel-emoji">✝️</div>
+    <h2 id="cel-texto"></h2>
+    <p id="cel-sub">A paz que excede o entendimento já estava esperando por você.</p>
+    <button class="cel-btn-ok" onclick="fecharCel()">✓ Continuar</button>
+    <button class="cel-btn-replay" onclick="abrirCel()">↺ Rever celebração</button>
+  </div>
+</div>
+
+<script>
+const FRASES = [
+  "Você acabou de dar o passo mais importante. O cuidado com você mesma começa agora.",
+  "Coragem não é a ausência do medo. É decidir que você vale mais do que ele.",
+  "Cada pequeno passo na direção certa muda o destino de toda uma jornada.",
+  "Você não precisa estar completamente bem para começar. Você só precisa começar."
+];
+
+// CALENDÁRIO
+const diasLidos = new Set();
+
+function buildCalendario() {
+  const cal = document.getElementById('calendario');
+  for (let i=1; i<=21; i++) {
+    const d = document.createElement('div');
+    d.className = 'cal-dia' + (diasLidos.has(i) ? ' lido' : '');
+    d.textContent = i;
+    d.id = `cal-${i}`;
+    d.onclick = () => toggleCalDia(i);
+    cal.appendChild(d);
+  }
+}
+
+function toggleCalDia(n) {
+  if (diasLidos.has(n)) { diasLidos.delete(n); }
+  else { diasLidos.add(n); }
+  document.getElementById(`cal-${n}`).classList.toggle('lido', diasLidos.has(n));
+  // sync com checkbox
+  const cb = document.querySelector(`#lbl-d${n} input`);
+  if (cb) cb.checked = diasLidos.has(n);
+  atualizarContagem();
+  autoSave();
+}
+
+function marcarDia(n, val) {
+  if (val) diasLidos.add(n); else diasLidos.delete(n);
+  const calDia = document.getElementById(`cal-${n}`);
+  if (calDia) calDia.classList.toggle('lido', val);
+  const lbl = document.getElementById(`lbl-d${n}`);
+  if (lbl) lbl.classList.toggle('marcado', val);
+  atualizarContagem();
+  autoSave();
+}
+
+function atualizarContagem() {
+  document.getElementById('cal-contagem').textContent = `${diasLidos.size} de 21 dias concluídos`;
+}
+
+// SAVE
+const SAVE_KEY = 'bonus6_paz';
+const CAMPOS = Array.from({length:21},(_,i)=>`d${i+1}`).concat(['enc-1','enc-2','enc-3']);
+
+function gatherData() {
+  const d = { lidos: [...diasLidos] };
+  CAMPOS.forEach(id => { const el=document.getElementById(id); if(el) d[id]=el.value; });
+  return d;
+}
+
+function restoreData(d) {
+  if (d.lidos) d.lidos.forEach(n => { diasLidos.add(n); marcarDia(n, true); const cb=document.querySelector(`#lbl-d${n} input`); if(cb) cb.checked=true; });
+  CAMPOS.forEach(id => { const el=document.getElementById(id); if(el&&d[id]!==undefined) el.value=d[id]; });
+  atualizarContagem();
+}
+
+let saveTO=null;
+function autoSave() {
+  clearTimeout(saveTO);
+  saveTO=setTimeout(()=>{
+    localStorage.setItem(SAVE_KEY,JSON.stringify(gatherData()));
+    const n=new Date();
+    document.getElementById('saveFab').textContent=`✓ Salvo às ${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}`;
+    setTimeout(()=>document.getElementById('saveFab').textContent='💾 Salvar',3000);
+  },800);
+}
+function manualSave() {
+  localStorage.setItem(SAVE_KEY,JSON.stringify(gatherData()));
+  const n=new Date();
+  document.getElementById('saveFab').textContent=`✓ Salvo às ${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}`;
+  setTimeout(()=>document.getElementById('saveFab').textContent='💾 Salvar',3000);
+}
+
+// CELEBRATION
+function celebrar() {
+  document.getElementById('cel-texto').textContent = FRASES[Math.floor(Math.random()*FRASES.length)];
+  document.getElementById('compromisso-feito').style.display='block';
+  document.getElementById('btn-rever').style.display='inline-block';
+  abrirCel();
+}
+function abrirCel() { document.getElementById('cel-overlay').classList.add('show'); lancarConfete(); tocarJingle(); }
+function fecharCel() { document.getElementById('cel-overlay').classList.remove('show'); }
+
+function lancarConfete() {
+  const canvas=document.getElementById('confettiCanvas');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const colors=['#C4785A','#7A9B76','#c9a84c','#F5EFE6','#F0DDD5','#fff'];
+  const p=Array.from({length:150},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height-canvas.height,r:Math.random()*7+3,c:colors[Math.floor(Math.random()*colors.length)],t:Math.random()*10-5,ta:0,ts:Math.random()*.1+.05}));
+  let f=0;
+  (function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    p.forEach(q=>{ctx.beginPath();ctx.lineWidth=q.r;ctx.strokeStyle=q.c;ctx.moveTo(q.x+q.t+q.r/4,q.y);ctx.lineTo(q.x+q.t,q.y+q.t+q.r/4);ctx.stroke();});
+    p.forEach(q=>{q.ta+=q.ts;q.y+=(Math.cos(f/20)+1+q.r/2)*1.5;q.t=Math.sin(q.ta)*12;if(q.y>canvas.height){q.y=-10;q.x=Math.random()*canvas.width;}});
+    f++;if(f<260)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+function tocarJingle() {
+  try {
+    const c=new (window.AudioContext||window.webkitAudioContext)();
+    [523,659,784,1047,784,659,523].reduce((t,freq)=>{
+      const o=c.createOscillator(),g=c.createGain();
+      o.connect(g);g.connect(c.destination);
+      o.frequency.value=freq;o.type='sine';
+      g.gain.setValueAtTime(0.15,t);g.gain.exponentialRampToValueAtTime(0.001,t+.3);
+      o.start(t);o.stop(t+.3);return t+.2;
+    },c.currentTime);
+  }catch(e){}
+}
+
+// NAV + PROGRESS
+const secs=document.querySelectorAll('.section');
+const navAs=document.querySelectorAll('.nav a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  navAs.forEach(a=>{a.classList.remove('active');if(a.getAttribute('href')==='#'+cur)a.classList.add('active');});
+  const dh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progressBar').style.width=(dh>0?window.scrollY/dh*100:0)+'%';
+});
+
+// INIT
+window.addEventListener('load',()=>{
+  buildCalendario();
+  try{const s=localStorage.getItem(SAVE_KEY);if(s)restoreData(JSON.parse(s));}catch(e){}
+});
+</script>
+</body>
+</html>
