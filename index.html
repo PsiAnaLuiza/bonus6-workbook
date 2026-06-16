@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bônus 6 — 21 Dias Para Voltar a Viver | Ana Luiza Medeiros</title>
+<title>Bônus 6 — 21 Dias de Reconstrução Emocional | Ana Luiza Medeiros</title>
 <style>
   :root {
     --bg:#FBF8F3; --terracota:#C4785A; --terracota-light:#F0DDD5;
@@ -145,7 +145,7 @@
 <div class="header">
   <div class="header-cruz">✝</div>
   <div class="badge">★ Bônus 6 — Exclusivo do Workbook ★</div>
-  <h1>21 Dias Para Voltar a Viver</h1>
+  <h1>21 Dias de Reconstrução Emocional</h1>
   <p>Uma palavra de Deus para cada dia, para ancorar sua alma quando a ansiedade chegar<br>Ana Luiza Medeiros – Psicóloga Clínica · analuizapsicologa.com.br</p>
 </div>
 
@@ -526,7 +526,6 @@ function toggleCalDia(n) {
   if (diasLidos.has(n)) { diasLidos.delete(n); }
   else { diasLidos.add(n); }
   document.getElementById(`cal-${n}`).classList.toggle('lido', diasLidos.has(n));
-  // sync com checkbox
   const cb = document.querySelector(`#lbl-d${n} input`);
   if (cb) cb.checked = diasLidos.has(n);
   atualizarContagem();
